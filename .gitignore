@@ -1,0 +1,13 @@
+node_modules
+yarn.lock
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+
+# Local env files
+.env
+.env.*
+!.env.example

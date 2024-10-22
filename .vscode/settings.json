@@ -1,0 +1,6 @@
+{
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "ui"],
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.classRegex": [],
+  "tailwindCSS.experimental.configFile": null
+}

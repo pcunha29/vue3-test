@@ -20,6 +20,8 @@ export const useProductDataStore = defineStore("productDataStore", () => {
     material: "100% cotton",
     brand: "Adidas",
     price: 50,
+    description:
+      "Show what your club means to you with every step. Made from soft French terry fabric and finished with ribbed cuffs, these adidas Manchester United pants offer snug comfort for the home. An embroidered team crest on one leg shows your football pride.",
   };
 
   const selectSize = (size: string) => {

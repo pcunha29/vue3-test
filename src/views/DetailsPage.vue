@@ -11,7 +11,7 @@ const commentStore = useCommentStore();
 // Data destructuring and maitain the reactivity
 const { sizes, selectSize, productImg, productDetails } = productDataStore;
 const { selectedSize } = storeToRefs(productDataStore);
-const { price, color, material, brand } = productDetails;
+const { price, color, material, brand, description } = productDetails;
 
 const { editingText, editingIndex, comments } = storeToRefs(commentStore);
 const { newComment, submitComment, allowEditComment, submitEditComment } =
@@ -79,6 +79,7 @@ const addToCart = () => {
 
       <div class="mt-10">
         <p class="text-sm mb-2">Product Details</p>
+        <p class="text-xs">{{ description }}</p>
         <ul class="font-sans text-xs mt-2">
           <li><strong>Color:</strong> {{ color }}</li>
           <li><strong>Material:</strong> {{ material }}</li>

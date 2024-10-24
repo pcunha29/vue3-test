@@ -27,7 +27,7 @@ const addToCart = () => {
 </script>
 
 <template>
-  <main class="flex pt-4 gap-10">
+  <main class="flex pt-10 gap-10">
     <div class="grid grid-cols-2 gap-2 max-w-[50%]">
       <div
         v-for="(imgUrl, index) in productImg"
@@ -40,7 +40,7 @@ const addToCart = () => {
       </div>
     </div>
 
-    <div class="p-10">
+    <div class="px-10">
       <h1 class="text-xl font-bold font-serif">
         Manchester United x Adidas Damen Future Icons 3 Streifen Leggings - Grün
       </h1>

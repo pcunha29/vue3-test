@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import productGalleryComponent from "@/components/productGalleryComponent.vue";
+import productDetailsComponent from "@/components/productDetailsComponent.vue";
 
 //Stores
 import { useCommentStore } from "../stores/commentStore";
@@ -11,7 +13,6 @@ const commentStore = useCommentStore();
 // Data destructuring and maitain the reactivity
 const { sizes, selectSize, productImg, productDetails } = productDataStore;
 const { selectedSize } = storeToRefs(productDataStore);
-const { price, color, material, brand, description } = productDetails;
 
 const { editingText, editingIndex, comments } = storeToRefs(commentStore);
 const { newComment, submitComment, allowEditComment, submitEditComment } =
@@ -28,65 +29,16 @@ const addToCart = () => {
 
 <template>
   <main class="flex pt-10 gap-10">
-    <div class="grid grid-cols-2 gap-2 max-w-[50%]">
-      <div
-        v-for="(imgUrl, index) in productImg"
-        :key="index"
-        :class="{
-          'col-span-2': index === 'img3' || index === 'img6',
-        }"
-      >
-        <img :src="imgUrl" :alt="`Product Image ${index}`" class="rounded-md" />
-      </div>
-    </div>
-
+    <productGalleryComponent :productImg="productImg" />
     <div class="px-10">
-      <h1 class="text-xl font-bold font-serif">
-        Manchester United x Adidas Damen Future Icons 3 Streifen Leggings - Grün
-      </h1>
-
-      <div class="text-xl font-bold font-sans">
-        <span>€{{ price }}</span>
-      </div>
-
-      <div class="mt-10">
-        <p class="text-sm mb-2">Select Size</p>
-        <div class="flex gap-2">
-          <button
-            v-for="size in sizes"
-            :key="size"
-            :class="[
-              'py-2 px-4 border-2 rounded-md transition-all duration-300',
-              selectedSize === size
-                ? 'border-red-500 bg-red-500 text-white'
-                : 'hover:border-red-500',
-            ]"
-            @click="selectSize(size)"
-          >
-            {{ size }}
-          </button>
-        </div>
-      </div>
-
-      <div class="mt-10">
-        <button
-          @click="addToCart"
-          class="w-full py-2 rounded-2xl text-white font-sans text-sm font-semibold bg-red-500 hover:bg-red-700 transition-all duration-300"
-        >
-          Add to Cart
-        </button>
-      </div>
-
-      <div class="mt-10">
-        <p class="text-sm mb-2">Product Details</p>
-        <p class="text-xs">{{ description }}</p>
-        <ul class="font-sans text-xs mt-2">
-          <li><strong>Color:</strong> {{ color }}</li>
-          <li><strong>Material:</strong> {{ material }}</li>
-          <li><strong>Brand:</strong> {{ brand }}</li>
-        </ul>
-      </div>
-
+      <productDetailsComponent
+        :productDetails="productDetails"
+        :sizes="sizes"
+        :selectedSize="selectedSize"
+        :addToCart="addToCart"
+        :selectSize="selectSize"
+      />
+      <!-- Comment Section -->
       <div class="mt-10">
         <p class="text-sm mb-2">Customer Comments</p>
 

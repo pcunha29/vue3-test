@@ -15,7 +15,9 @@ export const useProductDataStore = defineStore("productDataStore", () => {
 
   const sizes = ["XS", "S", "M", "L", "XL"];
   const selectedSize = ref("");
+
   const productDetails = {
+    name: "Manchester United x Adidas Damen Future Icons 3 Streifen Leggings",
     color: "Green",
     material: "100% cotton",
     brand: "Adidas",

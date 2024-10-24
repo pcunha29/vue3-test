@@ -1,47 +1,27 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { storeToRefs } from "pinia";
 
-const imgGallery = {
-  img1: "https://mufc-live.cdn.scayle.cloud/images/e35cd1835b85cf3a0d1e13456751aa6c.jpg?brightness=1&width=1536&height=2048&quality=75&bg=ffffff",
-  img2: "https://mufc-live.cdn.scayle.cloud/images/e9af2729edd15402afd7883f9d621f43.jpg?brightness=1&width=1536&height=2048&quality=75&bg=ffffff",
-  img3: "https://mufc-live.cdn.scayle.cloud/images/e9af2729edd15402afd7883f9d621f43.jpg?brightness=1&width=1536&height=2048&quality=75&bg=ffffff",
-  img4: "https://mufc-live.cdn.scayle.cloud/images/8644a21717141cef99919b3a7045ec2b.jpg?brightness=1&width=1536&height=2048&quality=75&bg=ffffff",
-  img5: "https://mufc-live.cdn.scayle.cloud/images/d4a8d031a4f3352b77332df2f9476a19.jpg?brightness=1&width=1536&height=2048&quality=75&bg=ffffff",
-  img6: "https://mufc-live.cdn.scayle.cloud/images/8c1e355f50f8e08677578d9e92100995.jpg?brightness=1&width=1536&height=2048&quality=75&bg=ffffff",
-  img7: "https://mufc-live.cdn.scayle.cloud/images/b6b12c9c495ab18638a4d60629b20ba5.jpg?brightness=1&width=1536&height=2048&quality=75&bg=ffffff",
-};
+//Stores
+import { useCommentStore } from "../stores/commentStore";
+import { useProductDataStore } from "../stores/productDataStore";
 
-//data
-const sizes = ["XS", "S", "M", "L", "XL"];
-const selectedSize = ref("");
-const comments: any[] = [];
-const newComment = {
-  name: "",
-  text: "",
-};
+const productDataStore = useProductDataStore();
+const commentStore = useCommentStore();
 
-//methods
-const selectSize = (size: string) => {
-  selectedSize.value = size;
-  console.log("Selected size:", size);
-};
+// Data destructuring and maitain the reactivity
+const { sizes, selectSize, productImg, productDetails } = productDataStore;
+const { selectedSize } = storeToRefs(productDataStore);
+const { price, color, material, brand } = productDetails;
+
+const { editingText, editingIndex, comments } = storeToRefs(commentStore);
+const { newComment, submitComment, allowEditComment, submitEditComment } =
+  commentStore;
 
 const addToCart = () => {
   if (selectedSize.value) {
     console.log(`Added to cart: ${selectedSize.value}`);
   } else {
-    console.error("Please select a size before adding to cart.");
-  }
-};
-
-const submitComment = () => {
-  if (newComment.name && newComment.text) {
-    comments.push({ ...newComment });
-
-    newComment.name = "";
-    newComment.text = "";
-  } else {
-    alert("Please fill out both fields.");
+    console.log("Please select a size before adding to cart.");
   }
 };
 </script>
@@ -50,7 +30,7 @@ const submitComment = () => {
   <main class="flex pt-4 gap-10">
     <div class="grid grid-cols-2 gap-2 max-w-[50%]">
       <div
-        v-for="(imgUrl, index) in imgGallery"
+        v-for="(imgUrl, index) in productImg"
         :key="index"
         :class="{
           'col-span-2': index === 'img3' || index === 'img6',
@@ -66,7 +46,7 @@ const submitComment = () => {
       </h1>
 
       <div class="text-xl font-bold font-sans">
-        <span>€49,99</span>
+        <span>€{{ price }}</span>
       </div>
 
       <div class="mt-10">
@@ -100,25 +80,53 @@ const submitComment = () => {
       <div class="mt-10">
         <p class="text-sm mb-2">Product Details</p>
         <ul class="font-sans text-xs mt-2">
-          <li><strong>Color:</strong> Green</li>
-          <li><strong>Material:</strong> 100% cotton</li>
-          <li><strong>Brand:</strong> Adidas</li>
+          <li><strong>Color:</strong> {{ color }}</li>
+          <li><strong>Material:</strong> {{ material }}</li>
+          <li><strong>Brand:</strong> {{ brand }}</li>
         </ul>
       </div>
 
       <div class="mt-10">
         <p class="text-sm mb-2">Customer Comments</p>
 
-        <!-- Displaying Comments -->
         <div v-if="comments.length">
           <div
             v-for="(comment, index) in comments"
             :key="index"
             class="comment"
           >
-            <p>
-              <strong>{{ comment.name }}:</strong> {{ comment.text }}
-            </p>
+            <div>
+              <strong>{{ comment.name }}:</strong>
+              <span class="ml-1">{{ comment.text }}</span>
+
+              <div v-if="comment.isEditable">
+                <button
+                  @click="allowEditComment(index)"
+                  class="text-xs text-gray-500"
+                >
+                  Edit Comment
+                </button>
+              </div>
+            </div>
+
+            <div v-if="editingIndex === index" class="mt-2">
+              <textarea
+                v-model="editingText"
+                class="border-2 p-2 w-full rounded-md mb-2"
+              ></textarea>
+              <button
+                @click="submitEditComment(index)"
+                class="bg-green-500 p-2 text-xs rounded-md text-white w-20 hover:bg-green-700 transition-all duration-300"
+              >
+                Save
+              </button>
+              <button
+                @click="editingIndex = null"
+                class="bg-gray-500 p-2 text-xs rounded-md text-white w-20 hover:bg-gray-700 transition-all duration-300 ml-2"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
         <p class="text-gray-400 text-xs" v-else>
@@ -142,7 +150,7 @@ const submitComment = () => {
           />
           <button
             type="submit"
-            class="bg-red-500 p-2 text-xs rounded-md text-white w-40"
+            class="bg-red-500 p-2 text-xs rounded-md text-white w-40 hover:bg-red-700 transition-all duration-300"
           >
             Submit Comment
           </button>

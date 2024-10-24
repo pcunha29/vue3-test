@@ -17,14 +17,6 @@ const { selectedSize } = storeToRefs(productDataStore);
 const { editingText, editingIndex, comments } = storeToRefs(commentStore);
 const { newComment, submitComment, allowEditComment, submitEditComment } =
   commentStore;
-
-const addToCart = () => {
-  if (selectedSize.value) {
-    console.log(`Added to cart: ${selectedSize.value}`);
-  } else {
-    console.log("Please select a size before adding to cart.");
-  }
-};
 </script>
 
 <template>
@@ -35,7 +27,6 @@ const addToCart = () => {
         :productDetails="productDetails"
         :sizes="sizes"
         :selectedSize="selectedSize"
-        :addToCart="addToCart"
         :selectSize="selectSize"
       />
       <!-- Comment Section -->

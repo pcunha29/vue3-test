@@ -1,11 +1,22 @@
 <script setup lang="ts">
-defineProps<{
+import { toRefs } from "vue";
+
+const props = defineProps<{
   sizes: string[];
-  selectedSize: string | null;
+  selectedSize: string;
   productDetails: Record<string, any>;
   selectSize: (size: string) => void;
-  addToCart: () => void;
 }>();
+
+const { selectedSize } = toRefs(props);
+
+const addToCart = () => {
+  if (selectedSize.value) {
+    console.log(`Added to cart: ${selectedSize.value}`);
+  } else {
+    console.log("Please select a size before adding to cart.", selectedSize);
+  }
+};
 </script>
 
 <template>
